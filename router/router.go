@@ -11,8 +11,8 @@ import (
 	"math/rand"
 	"time"
 
-	krakendrate "github.com/krakendio/krakend-ratelimit/v3"
-	"github.com/luraproject/lura/v2/config"
+	krakendrate "github.com/davron112/krakend-ratelimit/v3"
+	"github.com/davron112/lura/v2/config"
 )
 
 // Namespace is the key to use to store and access the custom config data for the router

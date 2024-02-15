@@ -1,10 +1,10 @@
-module github.com/krakendio/krakend-ratelimit/v3
+module github.com/davron112/krakend-ratelimit/v3
 
 go 1.20
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/luraproject/lura/v2 v2.2.8
+	github.com/davron112/lura/v2 v2.2.8
 )
 
 require (
@@ -18,7 +18,7 @@ require (
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
-	github.com/krakendio/flatmap v1.1.1 // indirect
+	github.com/davron112/flatmap v1.1.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect

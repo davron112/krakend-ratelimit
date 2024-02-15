@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/davron112/krakend-ratelimit/v3/router"
+	"github.com/davron112/lura/v2/config"
+	"github.com/davron112/lura/v2/proxy"
 	"github.com/gin-gonic/gin"
-	"github.com/krakendio/krakend-ratelimit/v3/router"
-	"github.com/luraproject/lura/v2/config"
-	"github.com/luraproject/lura/v2/proxy"
 )
 
 func TestNewRateLimiterMw_CustomHeaderIP(t *testing.T) {

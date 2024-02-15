@@ -7,14 +7,14 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/davron112/lura/v2/config"
+	"github.com/davron112/lura/v2/logging"
+	"github.com/davron112/lura/v2/proxy"
+	krakendgin "github.com/davron112/lura/v2/router/gin"
 	"github.com/gin-gonic/gin"
-	"github.com/luraproject/lura/v2/config"
-	"github.com/luraproject/lura/v2/logging"
-	"github.com/luraproject/lura/v2/proxy"
-	krakendgin "github.com/luraproject/lura/v2/router/gin"
 
-	krakendrate "github.com/krakendio/krakend-ratelimit/v3"
-	"github.com/krakendio/krakend-ratelimit/v3/router"
+	krakendrate "github.com/davron112/krakend-ratelimit/v3"
+	"github.com/davron112/krakend-ratelimit/v3/router"
 )
 
 // HandlerFactory is the out-of-the-box basic ratelimit handler factory using the default krakend endpoint
