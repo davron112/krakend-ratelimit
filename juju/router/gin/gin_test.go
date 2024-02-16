@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/davron112/krakend-ratelimit/v3/router"
+	"github.com/davron112/krakend-ratelimit/v2/juju/router"
 	"github.com/davron112/lura/v2/config"
 	"github.com/davron112/lura/v2/proxy"
 	"github.com/gin-gonic/gin"

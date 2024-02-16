@@ -1,5 +1,5 @@
 /*
-Package proxy provides a rate-limit proxy middleware.
+Package proxy provides a rate-limit proxy middleware using the github.com/juju/ratelimit lib.
 
 Sample backend extra config
 
@@ -16,7 +16,7 @@ Sample backend extra config
 
 Adding the middleware to your proxy stack
 
-	import ratelimitproxy "github.com/davron112/krakend-ratelimit/v3/proxy"
+	import juju "github.com/davron112/krakend-ratelimit/juju/proxy"
 
 	...
 
@@ -25,34 +25,34 @@ Adding the middleware to your proxy stack
 
 	...
 
-	p = ratelimitproxy.NewMiddleware(backend)(p)
+	p = juju.NewMiddleware(backend)(p)
 
 	...
 
-The ratelimit package provides an efficient token bucket implementation. See http://en.wikipedia.org/wiki/Token_bucket for more details.
+The ratelimit package provides an efficient token bucket implementation. See https://github.com/juju/ratelimit
+and http://en.wikipedia.org/wiki/Token_bucket for more details.
 */
 package proxy
 
 import (
 	"context"
 	"errors"
-	"fmt"
-	"time"
 
 	"github.com/davron112/lura/v2/config"
 	"github.com/davron112/lura/v2/logging"
 	"github.com/davron112/lura/v2/proxy"
 
-	krakendrate "github.com/davron112/krakend-ratelimit/v3"
+	krakendrate "github.com/davron112/krakend-ratelimit/v2"
+	"github.com/davron112/krakend-ratelimit/v2/juju"
 )
 
 // Namespace is the key to use to store and access the custom config data for the proxy
-const Namespace = "qos/ratelimit/proxy"
+const Namespace = "github.com/devopsfaith/krakend-ratelimit/juju/proxy"
 
 // Config is the custom config struct containing the params for the limiter
 type Config struct {
 	MaxRate  float64
-	Capacity uint64
+	Capacity int64
 }
 
 // BackendFactory adds a ratelimiting middleware wrapping the internal factory
@@ -75,16 +75,7 @@ func NewMiddleware(logger logging.Logger, remote *config.Backend) proxy.Middlewa
 	if cfg.MaxRate <= 0 {
 		return proxy.EmptyMiddleware
 	}
-
-	if cfg.Capacity == 0 {
-		if cfg.MaxRate < 1 {
-			cfg.Capacity = 1
-		} else {
-			cfg.Capacity = uint64(cfg.MaxRate)
-		}
-	}
-
-	tb := krakendrate.NewTokenBucket(cfg.MaxRate, cfg.Capacity)
+	tb := juju.NewLimiter(cfg.MaxRate, cfg.Capacity)
 	logger.Debug(logPrefix, "Enabling the rate limiter")
 	return func(next ...proxy.Proxy) proxy.Proxy {
 		if len(next) > 1 {
@@ -132,23 +123,12 @@ func ConfigGetter(e config.ExtraConfig) (Config, error) {
 	if v, ok := tmp["capacity"]; ok {
 		switch val := v.(type) {
 		case int64:
-			cfg.Capacity = uint64(val)
+			cfg.Capacity = val
 		case int:
-			cfg.Capacity = uint64(val)
+			cfg.Capacity = int64(val)
 		case float64:
-			cfg.Capacity = uint64(val)
+			cfg.Capacity = int64(val)
 		}
 	}
-
-	factor := 1.0
-	if v, ok := tmp["every"]; ok {
-		every, err := time.ParseDuration(fmt.Sprintf("%v", v))
-		if err != nil {
-			every = time.Second
-		}
-		factor = float64(time.Second) / float64(every)
-	}
-	cfg.MaxRate = cfg.MaxRate * factor
-
 	return cfg, nil
 }
